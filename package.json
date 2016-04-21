@@ -4,7 +4,7 @@
   "description": "pino logging koa middleware",
   "main": "logger.js",
   "scripts": {
-    "test": "standard && tap list test.js"
+    "test": "standard && tap test.js"
   },
   "precommit": "test",
   "repository": {

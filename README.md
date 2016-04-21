@@ -3,6 +3,10 @@
 
 [pino](https://github.com/mcollina/pino) logging [koa](http://npm.im/koa) middleware
 
+`koa-pino-logger@1.x.x` is for koa v1
+
+`koa-pino-logger@2.x.x` is for koa v2
+
 To our knowledge, `koa-pino-logger` is the [fastest](#benchmarks) [koa](http://npm.im/koa) logger in town.
 
 * [Benchmarks](#benchmarks)
@@ -41,9 +45,20 @@ With `koa-pino-logger` you can have features, safety **and** speed.
 
 ## Install
 
+Koa v1:
+
 ```
-npm i koa-pino-logger --save
+npm i koa-pino-logger@1 --save
 ```
+
+Koa v2:
+
+```
+npm i koa-pino-logger@2 --save
+```
+
+Currently, default install is for v1, once Koa v2 is released
+the default will be v2. 
 
 ## Example
 

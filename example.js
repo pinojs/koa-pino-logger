@@ -1,13 +1,14 @@
 'use strict'
 
-var koa = require('koa')
+var Koa = require('koa')
 var logger = require('./')
 
-var app = koa()
+var app = new Koa()
 app.use(logger())
 
-app.use(function * () {
-  this.body = 'hello world'
+app.use((ctx) => {
+  ctx.log.info('something else')
+  ctx.body = 'hello world'
 })
 
 app.listen(3000)

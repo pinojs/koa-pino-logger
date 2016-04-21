@@ -1,13 +1,13 @@
 'use strict'
 
 const morgan = require('koa-morgan')
-var koa = require('koa')
+var Koa = require('koa')
 
-var app = koa()
-app.use(morgan.middleware('combined'))
+var app = new Koa()
+app.use(morgan('combined'))
 
-app.use(function * () {
-  this.body = 'hello world'
+app.use((ctx) => {
+  ctx.body = 'hello world'
 })
 
 app.listen(3000)

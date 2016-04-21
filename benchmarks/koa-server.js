@@ -1,10 +1,10 @@
 'use strict'
 
-var koa = require('koa')
+var Koa = require('koa')
 
-var app = koa()
+var app = new Koa()
 
-app.use(function * () {
+app.use((ctx) => {
   this.body = 'hello world'
 })
 

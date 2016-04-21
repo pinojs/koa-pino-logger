@@ -1,14 +1,14 @@
 'use strict'
 
 var logger = require('koa-bunyan-logger')
-var koa = require('koa')
+var Koa = require('koa')
 
-var app = koa()
+var app = new Koa()
 app.use(logger())
 app.use(logger.requestLogger())
 
-app.use(function * () {
-  this.body = 'hello world'
+app.use((ctx) => {
+  ctx.body = 'hello world'
 })
 
 app.listen(3000)

@@ -68,7 +68,7 @@ the default will be v2.
 'use strict'
 
 var Koa = require('koa')
-var logger = require('./')
+var logger = require('koa-pino-logger')
 
 var app = new Koa()
 app.use(logger())
@@ -122,7 +122,7 @@ $ node example.js | pino
 'use strict'
 
 var Koa = require('koa')
-var logger = require('./')
+var logger = require('koa-pino-logger')
 
 var app = new Koa()
 app.silent = true // disable console.errors

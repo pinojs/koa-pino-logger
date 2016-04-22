@@ -31,37 +31,37 @@ function doGet (server) {
   http.get('http://' + address.address + ':' + address.port)
 }
 
-// test('default settings', function (t) {
-//   var dest = split(JSON.parse)
-//   var logger = pinoLogger(dest)
+test('default settings', function (t) {
+  var dest = split(JSON.parse)
+  var logger = pinoLogger(dest)
 
-//   setup(t, logger, function (err, server) {
-//     t.error(err)
-//     doGet(server)
-//   })
+  setup(t, logger, function (err, server) {
+    t.error(err)
+    doGet(server)
+  })
 
-//   dest.on('data', function (line) {
-//     t.ok(line.req, 'req is defined')
-//     t.ok(line.res, 'res is defined')
-//     t.equal(line.msg, 'request completed', 'message is set')
-//     t.equal(line.req.method, 'GET', 'method is get')
-//     t.equal(line.res.statusCode, 200, 'statusCode is 200')
-//     t.end()
-//   })
-// })
+  dest.on('data', function (line) {
+    t.ok(line.req, 'req is defined')
+    t.ok(line.res, 'res is defined')
+    t.equal(line.msg, 'request completed', 'message is set')
+    t.equal(line.req.method, 'GET', 'method is get')
+    t.equal(line.res.statusCode, 200, 'statusCode is 200')
+    t.end()
+  })
+})
 
-// test('exposes the internal pino', function (t) {
-//   t.plan(1)
+test('exposes the internal pino', function (t) {
+  t.plan(1)
 
-//   var dest = split(JSON.parse)
-//   var logger = pinoLogger(dest)
+  var dest = split(JSON.parse)
+  var logger = pinoLogger(dest)
 
-//   dest.on('data', function (line) {
-//     t.equal(line.msg, 'hello world')
-//   })
+  dest.on('data', function (line) {
+    t.equal(line.msg, 'hello world')
+  })
 
-//   logger.logger.info('hello world')
-// })
+  logger.logger.info('hello world')
+})
 
 test('exposes request bound child logger on context, req, res, request, response objects', function (t) {
   var dest = split(JSON.parse)

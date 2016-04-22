@@ -5,8 +5,8 @@ var pinoHttp = require('pino-http')
 var GeneratorFunction = function * nogen () {}.constructor
 module.exports = logger
 
-function logger (stream, opts) {
-  var wrap = pinoHttp(stream, opts)
+function logger (opts, stream) {
+  var wrap = pinoHttp(opts, stream)
   function pino (next) {
     wrap(this.req, this.res)
     this.log = this.request.log = this.response.log = this.req.log

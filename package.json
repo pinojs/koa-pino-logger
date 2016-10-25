@@ -7,10 +7,6 @@
     "test": "standard && tap test.js"
   },
   "precommit": "test",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/davidmarkclements/koa-pino-logger.git"
-  },
   "keywords": [
     "koa",
     "http",
@@ -19,10 +15,6 @@
     "pino"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/davidmarkclements/koa-pino-logger/issues"
-  },
-  "homepage": "https://github.com/davidmarkclements/koa-pino-logger#readme",
   "dependencies": {
     "pino-http": "^1.0.5"
   },
@@ -35,5 +27,14 @@
     "split2": "^2.0.1",
     "standard": "^6.0.8",
     "tap": "^5.7.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinojs/koa-pino-logger.git"
+  },
+  "author": "David Mark Clements",
+  "bugs": {
+    "url": "https://github.com/pinojs/koa-pino-logger/issues"
+  },
+  "homepage": "https://github.com/pinojs/koa-pino-logger#readme"
 }

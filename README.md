@@ -1,11 +1,11 @@
-# koa-pino-logger&nbsp;&nbsp;[![Build Status](https://travis-ci.org/davidmarkclements/koa-pino-logger.svg)](https://travis-ci.org/davidmarkclements/koa-pino-logger)
+# koa-pino-logger&nbsp;&nbsp;[![Build Status](https://travis-ci.org/pinojs/koa-pino-logger.svg)](https://travis-ci.org/pinojs/koa-pino-logger)
 
 
-[pino](https://github.com/mcollina/pino) logging [koa](http://npm.im/koa) middleware
+[pino](https://github.com/pinojs/pino) logging [koa](http://npm.im/koa) middleware
 
-`koa-pino-logger@1.x.x` is for koa v1 - [v1 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v1)
+`koa-pino-logger@1.x.x` is for koa v1 - [v1 readme](https://github.com/pinojs/koa-pino-logger/tree/v1)
 
-`koa-pino-logger@2.x.x` is for koa v2 - [v2 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v2)
+`koa-pino-logger@2.x.x` is for koa v2 - [v2 readme](https://github.com/pinojs/koa-pino-logger/tree/v2)
 
 To our knowledge, `koa-pino-logger` is the [fastest](#benchmarks) [koa](http://npm.im/koa) logger in town.
 
@@ -20,7 +20,7 @@ To our knowledge, `koa-pino-logger` is the [fastest](#benchmarks) [koa](http://n
 
 Benchmarks log each request/response pair while returning
 `'hello world'`, using
-[autocannon](https://github.com/mcollina/autocannon) with 100
+[autocannon](https://github.com/pinojs/autocannon) with 100
 connections and pipelining set to 1 (koa can't handle pipelining): `autocannon -c 100 -p 1 http://localhost:3000`.
 
 * `koa-bunyan-logger`: 5940 req/sec
@@ -45,14 +45,14 @@ With `koa-pino-logger` you can have features, safety **and** speed.
 
 ## Install
 
-Koa v1 - [[v1 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v1)]:
+Koa v1 - [[v1 readme](https://github.com/pinojs/koa-pino-logger/tree/v1)]:
 
 ```
 npm i koa-pino-logger@1 --save
 ```
 
 
-Koa v2 - [[v2 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v2)]:
+Koa v2 - [[v2 readme](https://github.com/pinojs/koa-pino-logger/tree/v2)]:
 
 ```
 npm i koa-pino-logger@2 --save

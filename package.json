@@ -16,7 +16,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "pino-http": "^1.0.5"
+    "pino-http": "^2.0.1"
   },
   "devDependencies": {
     "koa": "^1.2.0",

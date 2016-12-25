@@ -191,7 +191,7 @@ Along with automated request logging, the pino logger facilitates manual logging
 by adding the pino logger instance to the the context, request, response, req and res objects:
 
 ```js
-  app.use(ctx, next) => {
+  app.use((ctx, next) => {
     ctx.log.info('test 1')
     ctx.request.log.info('test 2')
     ctx.respose.log.info('test 3')

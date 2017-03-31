@@ -19,7 +19,7 @@ function logger (opts, stream) {
 // overriding `onerror` is much faster that using try/catch
 function catchErr (ctx, handler) {
   return function (e) {
-    if (!e) { return handler(e) }
+    if (!e) { return handler.call(ctx, e) }
     ctx.log.error({
       res: ctx.res,
       err: {
@@ -29,6 +29,6 @@ function catchErr (ctx, handler) {
       },
       responseTime: ctx.res.responseTime
     }, 'request errored')
-    return handler(e)
+    return handler.call(ctx, e)
   }
 }

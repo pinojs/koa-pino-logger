@@ -28,11 +28,11 @@
   },
   "devDependencies": {
     "koa": "^2.0.0",
-    "koa-bunyan-logger": "^2.0.0-pre1",
-    "koa-logger": "^2.0.0",
+    "koa-bunyan-logger": "^2.0.0",
+    "koa-logger": "^3.0.0",
     "koa-morgan": "^1.0.0",
     "split2": "^2.0.1",
-    "standard": "^6.0.8",
+    "standard": "^10.0.0",
     "tap": "^5.7.1"
   }
 }

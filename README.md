@@ -194,7 +194,7 @@ by adding the pino logger instance to the the context, request, response, req an
   app.use(function * (next) {
     this.log.info('test 1')
     this.request.log.info('test 2')
-    this.respose.log.info('test 3')
+    this.response.log.info('test 3')
     this.res.log.info('test 4')
     this.req.log.info('test 5')
     yield next

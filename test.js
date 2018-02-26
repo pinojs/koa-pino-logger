@@ -6,10 +6,17 @@ var Koa = require('koa')
 var pinoLogger = require('./')
 var split = require('split2')
 
-function setup (t, middleware, cb) {
+function setup (t, middlewares, cb) {
   var app = new Koa()
   app.silent = true
-  app.use(middleware)
+
+  if (!Array.isArray(middlewares)) {
+    middlewares = [middlewares]
+  }
+  middlewares.forEach(function (middleware) {
+    app.use(middleware)
+  })
+
   var server = app.listen(0, '127.0.0.1', function (err) {
     cb(err, server)
   })
@@ -198,6 +205,41 @@ test('does not inhibit downstream error handling', function (t) {
       throw Error('boom!')
     }
     return next()
+  })
+})
+
+test('work with error reporting middlewares', function (t) {
+  var dest = split(JSON.parse)
+  var logger = pinoLogger(dest)
+
+  t.plan(3)
+
+  function reporter (ctx, next) {
+    return next().catch((e) => {
+      t.ok(e)
+      ctx.app.emit('error', e, ctx)
+      ctx.body = {
+        message: e.message
+      }
+    })
+  }
+
+  var app = setup(t, [reporter, logger], function (err, server) {
+    t.error(err)
+    var address = server.address()
+    http.get('http://' + address.address + ':' + address.port + '/error')
+  })
+
+  app.use((ctx, next) => {
+    if (ctx.request.url === '/error') {
+      ctx.body = ''
+      throw Error('boom!')
+    }
+    return next()
+  })
+
+  dest.once('data', function (line) {
+    t.equal(line.err.message, 'boom!', 'err message is boom!')
   })
 })
 

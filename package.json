@@ -1,6 +1,6 @@
 {
   "name": "koa-pino-logger",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "pino logging koa middleware",
   "main": "logger.js",
   "scripts": {

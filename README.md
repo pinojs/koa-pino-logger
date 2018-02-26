@@ -1,11 +1,9 @@
-# koa-pino-logger&nbsp;&nbsp;[![Build Status](https://travis-ci.org/davidmarkclements/koa-pino-logger.svg)](https://travis-ci.org/davidmarkclements/koa-pino-logger)
+# koa-pino-logger&nbsp;&nbsp;[![Build Status](https://travis-ci.org/pinojs/koa-pino-logger.svg)](https://travis-ci.org/pinojs/koa-pino-logger)
 
 
-[pino](https://github.com/mcollina/pino) logging [koa](http://npm.im/koa) middleware
+[pino](https://github.com/pinojs/pino) logging [koa](http://npm.im/koa) middleware
 
-`koa-pino-logger@1.x.x` is for koa v1 - [v1 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v1)
-
-`koa-pino-logger@2.x.x` is for koa v2 - [v2 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v2)
+Note: For Koa v1 see [v1 readme](https://github.com/pinojs/koa-pino-logger/tree/v1)
 
 To our knowledge, `koa-pino-logger` is the [fastest](#benchmarks) JSON [koa](http://npm.im/koa) logger in town.
 
@@ -20,7 +18,7 @@ To our knowledge, `koa-pino-logger` is the [fastest](#benchmarks) JSON [koa](htt
 
 Benchmarks log each request/response pair while returning
 `'hello world'`, using
-[autocannon](https://github.com/mcollina/autocannon) with 100
+[autocannon](https://github.com/pinojs/autocannon) with 100
 connections and pipelining set to 1 (koa can't handle pipelining): `autocannon -c 100 -p 1 http://localhost:3000`.
 
 * `koa-bunyan-logger`: 5844 req/sec
@@ -44,21 +42,9 @@ With `koa-pino-logger` you can have features, safety **and** speed.
 
 ## Install
 
-Koa v1 - [[v1 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v1)]:
-
+```sh
+npm install --save koa-pino-logger
 ```
-npm i koa-pino-logger@1 --save
-```
-
-
-Koa v2 - [[v2 readme](https://github.com/davidmarkclements/koa-pino-logger/tree/v2)]:
-
-```
-npm i koa-pino-logger@2 --save
-```
-
-Currently, default install is for v1, once Koa v2 is released
-the default will be v2. 
 
 ## Example
 
@@ -67,7 +53,7 @@ the default will be v2.
 ```js
 'use strict'
 
-var Koa = require('koa')
+var koa = require('koa')
 var logger = require('koa-pino-logger')
 
 var app = new Koa()
@@ -121,7 +107,7 @@ $ node example.js | pino
 ```js
 'use strict'
 
-var Koa = require('koa')
+var koa = require('koa')
 var logger = require('koa-pino-logger')
 
 var app = new Koa()
@@ -194,7 +180,7 @@ by adding the pino logger instance to the the context, request, response, req an
   app.use((ctx, next) => {
     ctx.log.info('test 1')
     ctx.request.log.info('test 2')
-    ctx.respose.log.info('test 3')
+    ctx.response.log.info('test 3')
     ctx.res.log.info('test 4')
     ctx.req.log.info('test 5')
     return next()

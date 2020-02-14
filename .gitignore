@@ -35,3 +35,8 @@ node_modules
 # 0x
 .__browserify*
 profile*
+
+# dev env
+.vscode
+.nyc_output
+package-lock.json

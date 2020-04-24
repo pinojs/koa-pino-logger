@@ -1,5 +1,6 @@
-# koa-pino-logger&nbsp;&nbsp;[![Build Status](https://travis-ci.org/pinojs/koa-pino-logger.svg)](https://travis-ci.org/pinojs/koa-pino-logger)
+# koa-pino-logger
 
+[![Build Status](https://img.shields.io/github/workflow/status/pinojs/koa-pino-logger/CI)](https://github.com/pinojs/koa-pino-logger/actions)
 
 [pino](https://github.com/pinojs/pino) logging [koa](http://npm.im/koa) middleware
 

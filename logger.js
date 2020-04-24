@@ -9,17 +9,9 @@ function logger (opts, stream) {
   function pino (ctx, next) {
     wrap(ctx.req, ctx.res)
     ctx.log = ctx.request.log = ctx.response.log = ctx.req.log
-    return next().catch(function (e) {
-      ctx.log.error({
-        res: ctx.res,
-        err: {
-          type: e.constructor.name,
-          message: e.message,
-          stack: e.stack
-        },
-        responseTime: ctx.res.responseTime
-      }, 'request errored')
-      throw e
+    return next().catch(function (err) {
+      ctx.log.error({ err })
+      throw err
     })
   }
   pino.logger = wrap.logger

@@ -1,9 +1,9 @@
 'use strict'
 
-var Koa = require('koa')
-var logger = require('../')
+const Koa = require('koa')
+const logger = require('../')
 
-var app = new Koa()
+const app = new Koa()
 app.use(logger())
 
 app.use((ctx) => {

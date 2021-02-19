@@ -1,8 +1,8 @@
 'use strict'
 
-var Koa = require('koa')
+const Koa = require('koa')
 
-var app = new Koa()
+const app = new Koa()
 
 app.use((ctx) => {
   this.body = 'hello world'

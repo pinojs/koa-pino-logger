@@ -24,15 +24,15 @@
   },
   "homepage": "https://github.com/davidmarkclements/koa-pino-logger#readme",
   "dependencies": {
-    "pino-http": "^5.0.1"
+    "pino-http": "^5.5.0"
   },
   "devDependencies": {
-    "koa": "^2.0.0",
-    "koa-bunyan-logger": "^2.0.0",
-    "koa-logger": "^3.0.0",
-    "koa-morgan": "^1.0.0",
-    "split2": "^3.0.1",
-    "standard": "^14.0.0",
-    "tap": "^14.0.1"
+    "koa": "^2.13.1",
+    "koa-bunyan-logger": "^2.1.0",
+    "koa-logger": "^3.2.1",
+    "koa-morgan": "^1.0.1",
+    "split2": "^3.2.2",
+    "standard": "^16.0.3",
+    "tap": "^14.11.0"
   }
 }

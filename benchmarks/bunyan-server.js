@@ -1,9 +1,9 @@
 'use strict'
 
-var logger = require('koa-bunyan-logger')
-var Koa = require('koa')
+const logger = require('koa-bunyan-logger')
+const Koa = require('koa')
 
-var app = new Koa()
+const app = new Koa()
 app.use(logger())
 app.use(logger.requestLogger())
 

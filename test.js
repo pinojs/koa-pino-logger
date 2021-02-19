@@ -1,13 +1,13 @@
 'use strict'
 
-var test = require('tap').test
-var http = require('http')
-var Koa = require('koa')
-var pinoLogger = require('./')
-var split = require('split2')
+const test = require('tap').test
+const http = require('http')
+const Koa = require('koa')
+const pinoLogger = require('./')
+const split = require('split2')
 
 function setup (t, middlewares, cb) {
-  var app = new Koa()
+  const app = new Koa()
   app.silent = true
 
   if (!Array.isArray(middlewares)) {
@@ -17,7 +17,7 @@ function setup (t, middlewares, cb) {
     app.use(middleware)
   })
 
-  var server = app.listen(0, '127.0.0.1', function (err) {
+  const server = app.listen(0, '127.0.0.1', function (err) {
     cb(err, server)
   })
   app.use((ctx, next) => {
@@ -34,13 +34,13 @@ function setup (t, middlewares, cb) {
 }
 
 function doGet (server) {
-  var address = server.address()
+  const address = server.address()
   http.get('http://' + address.address + ':' + address.port)
 }
 
 test('default settings', function (t) {
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
 
   setup(t, logger, function (err, server) {
     t.error(err)
@@ -60,8 +60,8 @@ test('default settings', function (t) {
 test('exposes the internal pino', function (t) {
   t.plan(1)
 
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
 
   dest.on('data', function (line) {
     t.equal(line.msg, 'hello world')
@@ -71,9 +71,9 @@ test('exposes the internal pino', function (t) {
 })
 
 test('exposes request bound child logger on context, req, res, request, response objects', function (t) {
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
-  var app = setup(t, logger, function (err, server) {
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
+  const app = setup(t, logger, function (err, server) {
     t.error(err)
     doGet(server)
   })
@@ -97,9 +97,9 @@ test('exposes request bound child logger on context, req, res, request, response
 test('allocate a unique id to every request', function (t) {
   t.plan(5)
 
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
-  var lastId = null
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
+  let lastId = null
 
   setup(t, logger, function (err, server) {
     t.error(err)
@@ -115,12 +115,12 @@ test('allocate a unique id to every request', function (t) {
 })
 
 test('supports errors in the response', function (t) {
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
 
-  var app = setup(t, logger, function (err, server) {
+  const app = setup(t, logger, function (err, server) {
     t.error(err)
-    var address = server.address()
+    const address = server.address()
     http.get('http://' + address.address + ':' + address.port + '/error')
   })
 
@@ -144,12 +144,12 @@ test('supports errors in the response', function (t) {
 })
 
 test('supports errors in the middleware', function (t) {
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
 
-  var app = setup(t, logger, function (err, server) {
+  const app = setup(t, logger, function (err, server) {
     t.error(err)
-    var address = server.address()
+    const address = server.address()
     http.get('http://' + address.address + ':' + address.port + '/error')
   })
 
@@ -178,12 +178,12 @@ test('supports errors in the middleware', function (t) {
 })
 
 test('does not inhibit downstream error handling', function (t) {
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
 
-  var app = setup(t, logger, function (err, server) {
+  const app = setup(t, logger, function (err, server) {
     t.error(err)
-    var address = server.address()
+    const address = server.address()
     http.get('http://' + address.address + ':' + address.port + '/error')
   })
 
@@ -205,8 +205,8 @@ test('does not inhibit downstream error handling', function (t) {
 })
 
 test('work with error reporting middlewares', function (t) {
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
 
   t.plan(3)
 
@@ -220,9 +220,9 @@ test('work with error reporting middlewares', function (t) {
     })
   }
 
-  var app = setup(t, [reporter, logger], function (err, server) {
+  const app = setup(t, [reporter, logger], function (err, server) {
     t.error(err)
-    var address = server.address()
+    const address = server.address()
     http.get('http://' + address.address + ':' + address.port + '/error')
   })
 
@@ -240,10 +240,10 @@ test('work with error reporting middlewares', function (t) {
 })
 
 test('responseTime', function (t) {
-  var dest = split(JSON.parse)
-  var logger = pinoLogger(dest)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
 
-  var app = setup(t, logger, function (err, server) {
+  const app = setup(t, logger, function (err, server) {
     t.error(err)
     doGet(server)
   })

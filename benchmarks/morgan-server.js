@@ -1,9 +1,9 @@
 'use strict'
 
 const morgan = require('koa-morgan')
-var Koa = require('koa')
+const Koa = require('koa')
 
-var app = new Koa()
+const app = new Koa()
 app.use(morgan('combined'))
 
 app.use((ctx) => {

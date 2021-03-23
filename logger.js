@@ -62,7 +62,7 @@ function pinoLogger (opts, stream) {
   delete opts.customSuccessfulMessage
   delete opts.customErroredMessage
 
-  const logger = wrapChild(opts, theStream)
+  const logger = opts.logger ? wrapChild(opts, theStream) : pino(opts, stream)
   const genReqId = reqIdGenFactory(opts.genReqId)
   loggingMiddleware.logger = logger
   return loggingMiddleware
@@ -149,20 +149,22 @@ function pinoLogger (opts, stream) {
   }
 }
 
+// This function avoids creating a new object options object by removing/re-adding properties
 function wrapChild (opts, stream) {
+  // save these for later
   const prevLogger = opts.logger
   const prevGenReqId = opts.genReqId
-  let logger = null
 
-  if (prevLogger) {
-    opts.logger = undefined
-    opts.genReqId = undefined
-    logger = prevLogger.child(opts)
-    opts.logger = prevLogger
-    opts.genReqId = prevGenReqId
-  } else {
-    logger = pino(opts, stream)
-  }
+  let logger = null
+  // do not pass these to child
+  opts.logger = undefined
+  opts.genReqId = undefined
+
+  logger = prevLogger.child(opts)
+
+  // restore
+  opts.logger = prevLogger
+  opts.genReqId = prevGenReqId
 
   return logger
 }

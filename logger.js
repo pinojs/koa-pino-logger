@@ -121,18 +121,11 @@ function pinoLogger (opts, stream) {
     // TODO: do we need to expose the option to filter on the original url?
     if (autoLogging) {
       if (autoLoggingIgnorePaths.length) {
-        let url
-        if (autoLoggingGetPath) {
-          url = URL.parse(autoLoggingGetPath(ctx))
-        } else if (ctx.request.url) {
-          url = URL.parse(ctx.request.url)
-        }
+        // TODO: Do we still need to expose a get path method?
+        const url = autoLoggingGetPath ? URL.parse(autoLoggingGetPath(ctx)) : ctx.request.URL
         if (url && url.pathname) {
           shouldLogSuccess = !autoLoggingIgnorePaths.find(ignorePath => {
-            if (ignorePath instanceof RegExp) {
-              return ignorePath.test(url.pathname)
-            }
-            return ignorePath === url.pathname
+            return ignorePath instanceof RegExp ? ignorePath.test(url.pathname) : ignorePath === url.pathname
           })
         }
       }

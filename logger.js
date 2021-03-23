@@ -113,6 +113,10 @@ function pinoLogger (opts, stream) {
       log = log.child(customPropBindings)
     }
 
+    log.append = (mergeObject) => {
+      ctx.log = req.log = res.log = ctx.log.child(mergeObject)
+    }
+
     ctx.log = req.log = res.log = log
     ctx.res[startTime] = ctx.res[startTime] || Date.now()
     ctx.response[startTime] = ctx.response[startTime] || Date.now()

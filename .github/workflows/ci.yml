@@ -11,7 +11,7 @@ on:
         - '*.md'
 
 jobs:
-  test:
+  build:
     name: ${{ matrix.node-version }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -29,3 +29,11 @@ jobs:
         run: npm i
       - name: Tests
         run: npm test
+
+  automerge:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v2.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

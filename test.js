@@ -26,7 +26,7 @@ function setup (t, middlewares, cb) {
     }
     return next()
   })
-  t.tearDown(function (cb) {
+  t.teardown(function (cb) {
     server.close(cb)
   })
 
@@ -108,7 +108,7 @@ test('allocate a unique id to every request', function (t) {
   })
 
   dest.on('data', function (line) {
-    t.notEqual(line.req.id, lastId)
+    t.not(line.req.id, lastId)
     lastId = line.req.id
     t.ok(line.req.id, 'req.id is defined')
   })

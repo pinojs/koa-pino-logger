@@ -26,6 +26,12 @@ build/Release
 # Dependency directory
 node_modules
 
+# yarn cache
+.yarn
+.yarnrc.yml
+.pnp
+.pnp.*
+
 # Optional npm cache directory
 .npm
 
@@ -33,6 +39,19 @@ node_modules
 .node_repl_history
 
 # 0x
-.__browserify*
-profile*
-.nyc_output
+.__browserify_string_empty.js
+profile-*
+
+# tap --cov
+.nyc_output/
+
+# JetBrains IntelliJ IDEA
+.idea
+*.iml
+
+# VS Code
+.vscode/
+
+# lock files
+yarn.lock
+package-lock.json

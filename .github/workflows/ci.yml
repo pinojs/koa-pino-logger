@@ -14,6 +14,8 @@ jobs:
   test:
     name: ${{ matrix.node-version }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -29,3 +31,14 @@ jobs:
         run: npm i
       - name: Tests
         run: npm test
+
+  automerge:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

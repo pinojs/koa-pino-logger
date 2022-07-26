@@ -2,7 +2,6 @@
 
 [![npm version](https://img.shields.io/npm/v/koa-pino-logger)](https://www.npmjs.com/package/koa-pino-logger)
 [![Build Status](https://img.shields.io/github/workflow/status/pinojs/koa-pino-logger/CI)](https://github.com/pinojs/koa-pino-logger/actions)
-[![Known Vulnerabilities](https://snyk.io/test/github/pinojs/koa-pino-logger/badge.svg)](https://snyk.io/test/github/pinojs/koa-pino-logger)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 [pino](https://github.com/pinojs/pino) logging [koa](http://npm.im/koa) middleware
@@ -47,7 +46,7 @@ With `koa-pino-logger` you can have features, safety **and** speed.
 ## Install
 
 ```sh
-npm install --save koa-pino-logger
+npm i koa-pino-logger
 ```
 
 ## Example

@@ -46,7 +46,7 @@ With `koa-pino-logger` you can have features, safety **and** speed.
 ## Install
 
 ```sh
-npm install --save koa-pino-logger
+npm i koa-pino-logger
 ```
 
 ## Example

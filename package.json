@@ -31,6 +31,7 @@
     "koa-bunyan-logger": "^2.1.0",
     "koa-logger": "^3.2.1",
     "koa-morgan": "^1.0.1",
+    "pino": "^8.4.2",
     "split2": "^4.1.0",
     "standard": "^17.0.0",
     "tap": "^16.0.0"

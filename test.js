@@ -155,8 +155,7 @@ test('supports errors in the middleware', function (t) {
 
   app.use((ctx, next) => {
     if (ctx.request.url === '/error') {
-      ctx.body = ''
-      throw Error('boom!')
+      ctx.throw(418, 'boom!')
     }
     return next()
   })
@@ -164,16 +163,14 @@ test('supports errors in the middleware', function (t) {
   dest.once('data', function (line) {
     // logging the error:
     t.ok(line.req, 'req is defined')
-    t.equal(line.err.message, 'boom!')
-    dest.once('data', function (line) {
-      // logging the 500 response:
-      t.ok(line.req, 'req is defined')
-      t.ok(line.err, 'err is defined')
-      t.equal(line.msg, 'request errored')
-      t.equal(line.req.method, 'GET', 'method is get')
-      t.equal(line.res.statusCode, 500, 'statusCode is 500')
-      t.end()
-    })
+    t.ok(line.res, 'res is defined')
+    t.ok(line.err, 'err is defined')
+    t.ok(line.err.stack, 'err has stack')
+    t.equal(line.err.message, 'boom!', 'err message is boom!')
+    t.equal(line.err.status, 418, 'err status is 418')
+    t.equal(line.err.statusCode, 418, 'err statusCode is 418')
+    t.equal(line.msg, 'request errored', 'message is request errored')
+    t.end()
   })
 })
 

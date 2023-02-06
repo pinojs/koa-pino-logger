@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/davidmarkclements/koa-pino-logger#readme",
   "dependencies": {
-    "pino-http": "^7.0.0"
+    "pino-http": "^8.3.3"
   },
   "devDependencies": {
     "koa": "^2.13.1",

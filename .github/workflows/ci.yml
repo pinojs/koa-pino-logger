@@ -20,19 +20,24 @@ jobs:
       fail-fast: false
       matrix:
         os: [macOS-latest, windows-latest, ubuntu-latest]
-        node-version: [14, 16, 18]
+        node-version: [18, 20]
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install
+
+      - name: Install dependencies
         run: npm i
-      - name: Tests
+
+      - name: Run tests
         run: npm test
 
   automerge:
+    name: Automerge Dependabot PRs
     needs: test
     runs-on: ubuntu-latest
     permissions:

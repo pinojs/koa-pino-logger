@@ -38,6 +38,11 @@ function doGet (server) {
   http.get('http://' + address.address + ':' + address.port)
 }
 
+function doGetError (server) {
+  const address = server.address()
+  http.get('http://' + address.address + ':' + address.port + '/error')
+}
+
 test('default settings', function (t) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
@@ -120,13 +125,13 @@ test('supports errors in the response', function (t) {
 
   const app = setup(t, logger, function (err, server) {
     t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    doGetError(server)
   })
 
   app.use((ctx, next) => {
     if (ctx.request.url === '/error') {
       ctx.body = ''
+      ctx.res.flushHeaders()
       ctx.res.emit('error', Error('boom!'))
     }
     return next()
@@ -143,14 +148,36 @@ test('supports errors in the response', function (t) {
   })
 })
 
+test('status code will be null if headers are not flushed in response', function (t) {
+  t.plan(2)
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
+
+  const app = setup(t, logger, function (err, server) {
+    t.error(err)
+    doGetError(server)
+  })
+
+  app.use((ctx, next) => {
+    if (ctx.request.url === '/error') {
+      ctx.body = ''
+      ctx.res.emit('error', Error('boom!'))
+    }
+    return next()
+  })
+
+  dest.on('data', function (line) {
+    t.equal(line.res.statusCode, null, 'statusCode is null')
+  })
+})
+
 test('supports errors in the middleware', function (t) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
   const app = setup(t, logger, function (err, server) {
     t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    doGetError(server)
   })
 
   app.use((ctx, next) => {
@@ -183,8 +210,7 @@ test('does not inhibit downstream error handling', function (t) {
 
   const app = setup(t, logger, function (err, server) {
     t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    doGetError(server)
   })
 
   app.use((ctx, next) => {
@@ -222,8 +248,7 @@ test('work with error reporting middlewares', function (t) {
 
   const app = setup(t, [reporter, logger], function (err, server) {
     t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    doGetError(server)
   })
 
   app.use((ctx, next) => {

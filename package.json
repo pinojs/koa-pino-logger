@@ -27,12 +27,12 @@
     "pino-http": "git+https://github.com/pinojs/pino-http.git#next"
   },
   "devDependencies": {
-    "koa": "^2.13.1",
+    "koa": "^2.14.2",
     "koa-bunyan-logger": "^2.1.0",
     "koa-logger": "^3.2.1",
     "koa-morgan": "^1.0.1",
-    "split2": "^4.1.0",
-    "standard": "^17.0.0",
+    "split2": "^4.2.0",
+    "standard": "^17.1.0",
     "tap": "^16.3.9"
   }
 }

@@ -9,7 +9,7 @@
   "precommit": "test",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davidmarkclements/koa-pino-logger.git"
+    "url": "git+https://github.com/pinojs/koa-pino-logger.git"
   },
   "keywords": [
     "koa",
@@ -20,11 +20,11 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/davidmarkclements/koa-pino-logger/issues"
+    "url": "https://github.com/pinojs/koa-pino-logger/issues"
   },
-  "homepage": "https://github.com/davidmarkclements/koa-pino-logger#readme",
+  "homepage": "https://github.com/pinojs/koa-pino-logger#readme",
   "dependencies": {
-    "pino-http": "git+https://github.com/pinojs/pino-http.git#next"
+    "pino-http": "^10.3.0"
   },
   "devDependencies": {
     "koa": "^2.14.2",

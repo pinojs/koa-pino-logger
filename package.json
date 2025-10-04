@@ -6,7 +6,6 @@
   "scripts": {
     "test": "standard && tap test.js"
   },
-  "precommit": "test",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pinojs/koa-pino-logger.git"
@@ -27,12 +26,12 @@
     "pino-http": "^10.3.0"
   },
   "devDependencies": {
+    "@matteo.collina/tspl": "^0.2.0",
     "koa": "^2.14.2",
     "koa-bunyan-logger": "^2.1.0",
     "koa-logger": "^3.2.1",
     "koa-morgan": "^1.0.1",
     "split2": "^4.2.0",
-    "standard": "^17.1.0",
-    "tap": "^16.3.9"
+    "standard": "^17.1.0"
   }
 }

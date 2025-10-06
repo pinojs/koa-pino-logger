@@ -1,10 +1,13 @@
 'use strict'
 
-const test = require('tap').test
-const http = require('http')
-const Koa = require('koa')
-const pinoLogger = require('./')
+const test = require('node:test')
+const assert = require('node:assert')
+const http = require('node:http')
 const split = require('split2')
+const tspl = require('@matteo.collina/tspl')
+const Koa = require('koa')
+
+const pinoLogger = require('./')
 
 function setup (t, middlewares, cb) {
   const app = new Koa()
@@ -26,7 +29,7 @@ function setup (t, middlewares, cb) {
     }
     return next()
   })
-  t.teardown(function (cb) {
+  t.after(function (cb) {
     server.close(cb)
   })
 
@@ -38,90 +41,125 @@ function doGet (server) {
   http.get('http://' + address.address + ':' + address.port)
 }
 
-test('default settings', function (t) {
+function doGetError (server) {
+  const address = server.address()
+  http.get('http://' + address.address + ':' + address.port + '/error')
+}
+
+test('default settings', function (t, end) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
   setup(t, logger, function (err, server) {
-    t.error(err)
+    assert.equal(err, undefined)
     doGet(server)
   })
 
   dest.on('data', function (line) {
-    t.ok(line.req, 'req is defined')
-    t.ok(line.res, 'res is defined')
-    t.equal(line.msg, 'request completed', 'message is set')
-    t.equal(line.req.method, 'GET', 'method is get')
-    t.equal(line.res.statusCode, 200, 'statusCode is 200')
-    t.end()
+    assert.ok(line.req, 'req is defined')
+    assert.ok(line.res, 'res is defined')
+    assert.equal(line.msg, 'request completed', 'message is set')
+    assert.equal(line.req.method, 'GET', 'method is get')
+    assert.equal(line.res.statusCode, 200, 'statusCode is 200')
+    end()
   })
 })
 
-test('exposes the internal pino', function (t) {
-  t.plan(1)
-
+test('exposes the internal pino', function (t, end) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
   dest.on('data', function (line) {
-    t.equal(line.msg, 'hello world')
+    assert.equal(line.msg, 'hello world')
+    end()
   })
 
   logger.logger.info('hello world')
 })
 
-test('exposes request bound child logger on context, req, res, request, response objects', function (t) {
+test('exposes request bound child logger on context, req, res, request, response objects', function (t, end) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
   const app = setup(t, logger, function (err, server) {
-    t.error(err)
+    assert.equal(err, undefined)
     doGet(server)
   })
 
   app.use((ctx, next) => {
-    t.equal(ctx.req.log, ctx.log)
-    t.equal(ctx.res.log, ctx.log)
-    t.equal(ctx.request.log, ctx.log)
-    t.equal(ctx.response.log, ctx.log)
+    assert.equal(ctx.req.log, ctx.log)
+    assert.equal(ctx.res.log, ctx.log)
+    assert.equal(ctx.request.log, ctx.log)
+    assert.equal(ctx.response.log, ctx.log)
     ctx.log.info('test')
     return next()
   })
 
   dest.once('data', function (line) {
-    t.equal(line.msg, 'test', 'msg should be "test"')
-    t.ok(line.req, 'should be child logger with req')
-    t.end()
+    assert.equal(line.msg, 'test', 'msg should be "test"')
+    assert.ok(line.req, 'should be child logger with req')
+    end()
   })
 })
 
-test('allocate a unique id to every request', function (t) {
-  t.plan(5)
+test('allocate a unique id to every request', async function (t) {
+  const plan = tspl(t, { plan: 5 })
 
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
   let lastId = null
 
   setup(t, logger, function (err, server) {
-    t.error(err)
+    plan.equal(err, undefined)
     doGet(server)
     doGet(server)
   })
 
   dest.on('data', function (line) {
-    t.not(line.req.id, lastId)
+    plan.equal(line.req.id !== lastId, true)
     lastId = line.req.id
-    t.ok(line.req.id, 'req.id is defined')
+    plan.ok(line.req.id, 'req.id is defined')
   })
+
+  await plan
 })
 
-test('supports errors in the response', function (t) {
+test('supports errors in the response', function (t, end) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
   const app = setup(t, logger, function (err, server) {
-    t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    assert.equal(err, undefined)
+    doGetError(server)
+  })
+
+  app.use((ctx, next) => {
+    if (ctx.request.url === '/error') {
+      ctx.body = ''
+      ctx.res.flushHeaders()
+      ctx.res.emit('error', Error('boom!'))
+    }
+    return next()
+  })
+
+  dest.on('data', function (line) {
+    assert.ok(line.req, 'req is defined')
+    assert.ok(line.res, 'res is defined')
+    assert.ok(line.err, 'err is defined')
+    assert.equal(line.msg, 'request errored', 'message is set')
+    assert.equal(line.req.method, 'GET', 'method is get')
+    assert.equal(line.res.statusCode, 200, 'statusCode is 200')
+    end()
+  })
+})
+
+test('status code will be null if headers are not flushed in response', async function (t) {
+  const plan = tspl(t, { plan: 2 })
+  const dest = split(JSON.parse)
+  const logger = pinoLogger(dest)
+
+  const app = setup(t, logger, function (err, server) {
+    plan.equal(err, undefined)
+    doGetError(server)
   })
 
   app.use((ctx, next) => {
@@ -133,24 +171,19 @@ test('supports errors in the response', function (t) {
   })
 
   dest.on('data', function (line) {
-    t.ok(line.req, 'req is defined')
-    t.ok(line.res, 'res is defined')
-    t.ok(line.err, 'err is defined')
-    t.equal(line.msg, 'request errored', 'message is set')
-    t.equal(line.req.method, 'GET', 'method is get')
-    t.equal(line.res.statusCode, 200, 'statusCode is 200')
-    t.end()
+    plan.equal(line.res.statusCode, null, 'statusCode is null')
   })
+
+  await plan
 })
 
-test('supports errors in the middleware', function (t) {
+test('supports errors in the middleware', function (t, end) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
   const app = setup(t, logger, function (err, server) {
-    t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    assert.equal(err, undefined)
+    doGetError(server)
   })
 
   app.use((ctx, next) => {
@@ -163,35 +196,34 @@ test('supports errors in the middleware', function (t) {
 
   dest.once('data', function (line) {
     // logging the error:
-    t.ok(line.req, 'req is defined')
-    t.equal(line.err.message, 'boom!')
+    assert.ok(line.req, 'req is defined')
+    assert.equal(line.err.message, 'boom!')
     dest.once('data', function (line) {
       // logging the 500 response:
-      t.ok(line.req, 'req is defined')
-      t.ok(line.err, 'err is defined')
-      t.equal(line.msg, 'request errored')
-      t.equal(line.req.method, 'GET', 'method is get')
-      t.equal(line.res.statusCode, 500, 'statusCode is 500')
-      t.end()
+      assert.ok(line.req, 'req is defined')
+      assert.ok(line.err, 'err is defined')
+      assert.equal(line.msg, 'request errored')
+      assert.equal(line.req.method, 'GET', 'method is get')
+      assert.equal(line.res.statusCode, 500, 'statusCode is 500')
+      end()
     })
   })
 })
 
-test('does not inhibit downstream error handling', function (t) {
+test('does not inhibit downstream error handling', function (t, end) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
   const app = setup(t, logger, function (err, server) {
-    t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    assert.equal(err, undefined)
+    doGetError(server)
   })
 
   app.use((ctx, next) => {
     return next().catch((e) => {
-      t.ok(e)
-      t.equal(e.message, 'boom!')
-      t.end()
+      assert.ok(e)
+      assert.equal(e.message, 'boom!')
+      end()
     })
   })
 
@@ -204,15 +236,15 @@ test('does not inhibit downstream error handling', function (t) {
   })
 })
 
-test('work with error reporting middlewares', function (t) {
+test('work with error reporting middlewares', async function (t) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
-  t.plan(3)
+  const plan = tspl(t, { plan: 3 })
 
   function reporter (ctx, next) {
     return next().catch((e) => {
-      t.ok(e)
+      plan.ok(e)
       ctx.app.emit('error', e, ctx)
       ctx.body = {
         message: e.message
@@ -221,9 +253,8 @@ test('work with error reporting middlewares', function (t) {
   }
 
   const app = setup(t, [reporter, logger], function (err, server) {
-    t.error(err)
-    const address = server.address()
-    http.get('http://' + address.address + ':' + address.port + '/error')
+    plan.equal(err, undefined)
+    doGetError(server)
   })
 
   app.use((ctx, next) => {
@@ -235,16 +266,18 @@ test('work with error reporting middlewares', function (t) {
   })
 
   dest.once('data', function (line) {
-    t.equal(line.err.message, 'boom!', 'err message is boom!')
+    plan.equal(line.err.message, 'boom!', 'err message is boom!')
   })
+
+  await plan
 })
 
-test('responseTime', function (t) {
+test('responseTime', function (t, end) {
   const dest = split(JSON.parse)
   const logger = pinoLogger(dest)
 
   const app = setup(t, logger, function (err, server) {
-    t.error(err)
+    assert.equal(err, undefined)
     doGet(server)
   })
 
@@ -260,7 +293,7 @@ test('responseTime', function (t) {
 
   dest.once('data', function (line) {
     // let's take into account Node v0.10 is less precise
-    t.ok(line.responseTime >= 90, 'responseTime is defined and in ms')
-    t.end()
+    assert.ok(line.responseTime >= 90, 'responseTime is defined and in ms')
+    end()
   })
 })

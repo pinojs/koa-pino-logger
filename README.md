@@ -56,7 +56,7 @@ npm i koa-pino-logger
 ```js
 'use strict'
 
-var koa = require('koa')
+var Koa = require('koa')
 var logger = require('koa-pino-logger')
 
 var app = new Koa()
@@ -110,7 +110,7 @@ $ node example.js | pino
 ```js
 'use strict'
 
-var koa = require('koa')
+var Koa = require('koa')
 var logger = require('koa-pino-logger')
 
 var app = new Koa()

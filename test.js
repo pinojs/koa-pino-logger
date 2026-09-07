@@ -41,6 +41,19 @@ function doGet (server) {
   http.get('http://' + address.address + ':' + address.port)
 }
 
+function doGetWithAuthorization (server) {
+  const address = server.address()
+  const options = {
+    hostname: address.address,
+    port: address.port,
+    path: '/',
+    headers: {
+      authorization: 'Bearer secret'
+    }
+  }
+  http.get(options)
+}
+
 function doGetError (server) {
   const address = server.address()
   http.get('http://' + address.address + ':' + address.port + '/error')
@@ -61,6 +74,23 @@ test('default settings', function (t, end) {
     assert.equal(line.msg, 'request completed', 'message is set')
     assert.equal(line.req.method, 'GET', 'method is get')
     assert.equal(line.res.statusCode, 200, 'statusCode is 200')
+    end()
+  })
+})
+
+test('redacts request headers', function (t, end) {
+  const dest = split(JSON.parse)
+  const logger = pinoLogger({
+    redact: ['req.headers.authorization']
+  }, dest)
+
+  setup(t, logger, function (err, server) {
+    assert.equal(err, undefined)
+    doGetWithAuthorization(server)
+  })
+
+  dest.on('data', function (line) {
+    assert.equal(line.req.headers.authorization, '[Redacted]')
     end()
   })
 })
